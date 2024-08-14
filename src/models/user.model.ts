@@ -8,6 +8,7 @@ import {
   HasMany,
 } from "sequelize-typescript";
 import Movie from "./movie.model";
+import Genre from "./genre.model";
 
 @Table({
   tableName: "users",
@@ -18,8 +19,12 @@ class User extends Model {
   @Unique @AllowNull(false) @NotEmpty @Column declare name: string;
   @AllowNull(false) @NotEmpty @Column declare password: string;
   @AllowNull(false) @NotEmpty @Column declare email: string;
-  // @HasMany(() => Movie)
-  // movies: Movie[]=[]
+
+  @HasMany(() => Movie)
+  createdMovies: Movie[] = [];
+
+  @HasMany(() => Genre)
+  createdGenres: Genre[] = [];
 
   public static async doesNameExists(name: string) {
     const count = await this.count({ where: { name } });
