@@ -16,7 +16,7 @@ const movieRouter = Router();
 
 movieRouter.post(
   "/",
-  isAuth,
+  // isAuth,
   checkSchema(createMovieValidation),
   validationMiddleware,
   createMovie

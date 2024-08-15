@@ -28,7 +28,7 @@ class Movie extends Model {
   @AllowNull(false) @NotEmpty @Column declare director: string;
   @AllowNull(false) @NotEmpty @Column declare duration: string;
   @ForeignKey(() => User)
-  @AllowNull(false)
+  @AllowNull(true)
   @NotEmpty
   @Column
   declare creatorId: number;

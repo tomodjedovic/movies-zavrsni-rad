@@ -4,23 +4,23 @@ import { verify } from "jsonwebtoken";
 import { getTokenKey } from "../middlewares/auth.middlewares";
 import { AuthRequest } from "../types/express.types";
 import { TypeUser } from "../types/user.types";
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 
 export async function createGenre(req: AuthRequest, res: Response) {
   try {
     const { name } = req.body;
-    const token = req.headers.authorization;
-    if (!token) {
-      return res.status(401).json({ message: "unauthorized, mising token" });
-    }
-    const payload = verify(token.replace("Bearer ", ""), getTokenKey());
-    if (!payload)
-      return res.status(401).json({ message: "unauthorized,error " });
-    req.user = payload as TypeUser;
+    // const token = req.headers.authorization;
+    // if (!token) {
+    //   return res.status(401).json({ message: "unauthorized, mising token" });
+    // }
+    // const payload = verify(token.replace("Bearer ", ""), getTokenKey());
+    // if (!payload)
+    //   return res.status(401).json({ message: "unauthorized,error " });
+    // req.user = payload as TypeUser;
 
     const genre = await Genre.create({
       name: name,
-      creatorId: req.user.id,
+      // creatorId: req.user.id,
     });
 
     if (!genre)
@@ -87,25 +87,26 @@ export async function getGenreBuId(req: Request, res: Response) {
 export async function deleteGenre(req: AuthRequest, res: Response) {
   try {
     const { id } = req.params;
-    const genre = await Genre.findByPk(id);
-    if (!genre) return res.status(404).json({ message: "genre not found" });
-    const token = req.headers.authorization;
-    if (!token) {
-      return res.status(401).json({ message: "unauthorized, mising token" });
-    }
-    const payload = verify(token.replace("Bearer ", ""), getTokenKey());
-    if (!payload)
-      return res.status(401).json({ message: "unauthorized,error " });
-    req.user = payload as TypeUser;
 
-    if (genre.creatorId !== req.user.id) {
-      return res.status(400).json({ message: "no credentails for deleting" });
-    }
-    const deletedGenre = await Genre.destroy({ where: { genre } });
+    const genre = Genre.findByPk(id);
+    // const token = req.headers.authorization;
+    // if (!token) {
+    //   return res.status(401).json({ message: "unauthorized, mising token" });
+    // }
+    // const payload = verify(token.replace("Bearer ", ""), getTokenKey());
+    // if (!payload)
+    //   return res.status(401).json({ message: "unauthorized,error " });
+    // req.user = payload as TypeUser;
 
+    // if (genre.creatorId !== req.user.id) {
+    //   return res.status(400).json({ message: "no credentails for deleting" });
+    // }
+    const deletedGenre = await Genre.destroy({ where: { id } });
+    if (!deletedGenre)
+      return res.status(404).json({ message: "genre not found" });
     return res
       .status(200)
-      .json({ message: `movie with id ${genre.id} deleted sucsessfuly` });
+      .json({ message: `movie with id ${id} deleted sucsessfuly` });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "internal server error" });
@@ -121,19 +122,19 @@ export async function updateGenre(req: AuthRequest, res: Response) {
     if (!genre) {
       return res.status(404).json({ message: "genre not found" });
     }
-    const token = req.headers.authorization;
+    // const token = req.headers.authorization;
 
-    if (!token) {
-      return res.status(401).json({ message: "unauthorized, mising token" });
-    }
-    const payload = verify(token.replace("Bearer ", ""), getTokenKey());
-    if (!payload)
-      return res.status(401).json({ message: "unauthorized,error " });
-    req.user = payload as TypeUser;
+    // if (!token) {
+    //   return res.status(401).json({ message: "unauthorized, mising token" });
+    // }
+    // const payload = verify(token.replace("Bearer ", ""), getTokenKey());
+    // if (!payload)
+    //   return res.status(401).json({ message: "unauthorized,error " });
+    // req.user = payload as TypeUser;
 
-    if (genre.creatorId !== req.user.id) {
-      return res.status(400).json({ message: "no credentails for updating" });
-    }
+    // if (genre.creatorId !== req.user.id) {
+    //   return res.status(400).json({ message: "no credentails for updating" });
+    // }
     if (name) genre.name = name;
 
     await genre.save();

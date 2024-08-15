@@ -16,7 +16,7 @@ const genreRouter = Router();
 
 genreRouter.post(
   "/",
-  isAuth,
+  // isAuth,
   checkSchema(createGenreValidator),
   validationMiddleware,
   createGenre
