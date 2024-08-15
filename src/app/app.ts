@@ -7,6 +7,7 @@ export default function createApp() {
   const app = express();
 
   app.use(express.json());
+
   app.use("/api/auth", authRouter);
   app.use("/api/genres", genreRouter);
   app.use("/api/movies", movieRouter);

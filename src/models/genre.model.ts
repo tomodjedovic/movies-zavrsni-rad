@@ -27,7 +27,7 @@ class Genre extends Model {
   @BelongsTo(() => User)
   // @Column
   // declare creator: User;
-  // @BelongsToMany(() => Movie, () => GenreMovie)
+  @BelongsToMany(() => Movie, () => GenreMovie)
   // movies: Movie[] = [];
   public static async doesGenreExists(name: string) {
     const count = await this.count({ where: { name } });

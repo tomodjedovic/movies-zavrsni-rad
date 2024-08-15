@@ -34,8 +34,8 @@ class Movie extends Model {
   declare creatorId: number;
   @BelongsTo(() => User)
   // @Column
-  // declare creator: User;
-  // @BelongsToMany(() => Genre, () => GenreMovie)
+  // declare user: User;
+  @BelongsToMany(() => Genre, () => GenreMovie)
   // movieGenres: Genre[] = [];
   public static async doesMovieExists(title: string) {
     const count = await this.count({ where: { title } });

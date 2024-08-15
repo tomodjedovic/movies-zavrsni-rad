@@ -5,6 +5,7 @@ import Movie from "../models/movie.model";
 import { AuthRequest } from "../types/express.types";
 import { TypeUser } from "../types/user.types";
 import { Op } from "sequelize";
+import GenreMovie from "../models/genre.movie.model";
 
 export async function createMovie(req: AuthRequest, res: Response) {
   try {
@@ -17,6 +18,7 @@ export async function createMovie(req: AuthRequest, res: Response) {
       treiler,
       director,
       duration,
+      genreId,
     } = req.body;
     const token = req.headers.authorization;
     if (!token) {
@@ -42,6 +44,12 @@ export async function createMovie(req: AuthRequest, res: Response) {
       return res
         .status(400)
         .json({ message: "error while creating movie. Please try again" });
+    }
+    if (genreId) {
+      const genreMovie = await GenreMovie.create({
+        movieId: movie.id,
+        genreId: genreId,
+      });
     }
     return res.status(201).json(movie.sanitize);
   } catch (error) {
